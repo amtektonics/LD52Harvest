@@ -1,0 +1,84 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Assets/Sprites/Background.png" type="Texture" id=1]
+[ext_resource path="res://Common/Res/Entities/Field.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Common/Res/Cards/SeedCard.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Common/Stages/GameStage/HandManager.gd" type="Script" id=4]
+[ext_resource path="res://Common/Res/Fonts/NunitoSans-64B.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Assets/Sprites/Coin.png" type="Texture" id=6]
+[ext_resource path="res://Common/Res/Entities/Deck.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Common/Res/Themes/DefaultTheme.tres" type="Theme" id=8]
+[ext_resource path="res://Common/Stages/GameStage.gd" type="Script" id=9]
+
+[node name="GameStage" type="Node"]
+script = ExtResource( 9 )
+
+[node name="Background" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Field" parent="." instance=ExtResource( 2 )]
+position = Vector2( 504, 540 )
+
+[node name="Field2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 960, 540 )
+
+[node name="Field3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1416, 540 )
+
+[node name="HandManager" type="Node2D" parent="."]
+position = Vector2( 960, 912 )
+script = ExtResource( 4 )
+
+[node name="SeedCard" parent="HandManager" instance=ExtResource( 3 )]
+
+[node name="SeedCard5" parent="HandManager" instance=ExtResource( 3 )]
+
+[node name="SeedCard6" parent="HandManager" instance=ExtResource( 3 )]
+
+[node name="SeedCard7" parent="HandManager" instance=ExtResource( 3 )]
+
+[node name="SeedCard8" parent="HandManager" instance=ExtResource( 3 )]
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+
+[node name="Hud" type="Control" parent="HudLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 8 )
+
+[node name="CoinTex" type="TextureRect" parent="HudLayer/Hud"]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 140.0
+margin_bottom = 136.0
+texture = ExtResource( 6 )
+
+[node name="MoneyLabel" type="Label" parent="HudLayer/Hud/CoinTex"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 15.0
+margin_top = -43.0
+margin_right = 178.0
+margin_bottom = 45.0
+custom_fonts/font = ExtResource( 5 )
+text = "1"
+
+[node name="EndTurnBtn" type="Button" parent="HudLayer/Hud"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -240.0
+margin_top = -25.5
+margin_right = -40.0
+margin_bottom = 25.5
+text = "End Turn"
+
+[node name="Deck" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1770, 912 )
+
+[connection signal="pressed" from="HudLayer/Hud/EndTurnBtn" to="." method="_on_EndTurnBtn_pressed"]
