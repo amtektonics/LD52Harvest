@@ -26,3 +26,14 @@ func update_hand_position():
 	for card in _cards:
 		card.set_hand_position(Vector2(x_start + get_global_position().x, get_global_position().y))
 		x_start += (card_size.x + spacing)
+
+
+func get_card_count():
+	_cards.clear()
+	
+	for c in get_children():
+		if c.is_in_group("Card"):
+			if(!c.is_card_consumed()):
+				_cards.append(c)
+	
+	return _cards.size()

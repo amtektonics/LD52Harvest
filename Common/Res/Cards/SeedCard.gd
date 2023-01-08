@@ -15,6 +15,8 @@ var _hand_position = Vector2()
 var _mouse_offset = Vector2()
 
 
+onready var GameStage = get_node("/root/StageHandler/GameStage")
+
 onready var _cost_label = $Cost
 
 onready var _name_label = $Name
@@ -41,11 +43,18 @@ func _test_for_interaction():
 		for a in get_overlapping_areas():
 			if(a.is_in_group("Field")):
 				if(!a.has_seed):
-					_should_return = false
-					a.set_seed(card_id)
-					_is_consumed = true
-					get_parent().update_hand_position()
-					queue_free()
+					if(GameStage.remove_money(CardRepo.seeds[card_id]["cost"])):
+						_should_return = false
+						a.set_seed(card_id)
+						_is_consumed = true
+						get_parent().update_hand_position()
+						queue_free()
+			elif(a.is_in_group("Discard")):
+				_should_return = false
+				_is_consumed = true
+				get_parent().update_hand_position()
+				queue_free()
+		
 
 func _process(delta):
 	if(_is_dragging):

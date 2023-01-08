@@ -1,14 +1,18 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Assets/Sprites/Background.png" type="Texture" id=1]
 [ext_resource path="res://Common/Res/Entities/Field.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Common/Res/Cards/SeedCard.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Audio/Music/HarvestSong.ogg" type="AudioStream" id=3]
 [ext_resource path="res://Common/Stages/GameStage/HandManager.gd" type="Script" id=4]
 [ext_resource path="res://Common/Res/Fonts/NunitoSans-64B.tres" type="DynamicFont" id=5]
 [ext_resource path="res://Assets/Sprites/Coin.png" type="Texture" id=6]
-[ext_resource path="res://Common/Res/Entities/Deck.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Common/Res/Entities/SeedDeck.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Common/Res/Themes/DefaultTheme.tres" type="Theme" id=8]
 [ext_resource path="res://Common/Stages/GameStage.gd" type="Script" id=9]
+[ext_resource path="res://Common/Res/Entities/BuffDeck.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Assets/UI/Music.png" type="Texture" id=11]
+[ext_resource path="res://Assets/Sprites/Tutorial.png" type="Texture" id=12]
+[ext_resource path="res://Common/Res/Entities/DiscardPile.tscn" type="PackedScene" id=13]
 
 [node name="GameStage" type="Node"]
 script = ExtResource( 9 )
@@ -26,19 +30,15 @@ position = Vector2( 960, 540 )
 [node name="Field3" parent="." instance=ExtResource( 2 )]
 position = Vector2( 1416, 540 )
 
+[node name="SeedDeck" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1805, 912 )
+
+[node name="BuffDeck" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1590, 912 )
+
 [node name="HandManager" type="Node2D" parent="."]
-position = Vector2( 960, 912 )
+position = Vector2( 832, 912 )
 script = ExtResource( 4 )
-
-[node name="SeedCard" parent="HandManager" instance=ExtResource( 3 )]
-
-[node name="SeedCard5" parent="HandManager" instance=ExtResource( 3 )]
-
-[node name="SeedCard6" parent="HandManager" instance=ExtResource( 3 )]
-
-[node name="SeedCard7" parent="HandManager" instance=ExtResource( 3 )]
-
-[node name="SeedCard8" parent="HandManager" instance=ExtResource( 3 )]
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 
@@ -72,13 +72,164 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -240.0
+margin_left = -280.0
 margin_top = -25.5
-margin_right = -40.0
+margin_right = -80.0
 margin_bottom = 25.5
 text = "End Turn"
 
-[node name="Deck" parent="." instance=ExtResource( 7 )]
-position = Vector2( 1770, 912 )
+[node name="PopupHandler" type="Control" parent="HudLayer/Hud"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="CenterContainer" type="CenterContainer" parent="HudLayer/Hud/PopupHandler"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="HudLayer/Hud/PopupHandler/CenterContainer"]
+margin_left = 560.0
+margin_top = 340.0
+margin_right = 1360.0
+margin_bottom = 740.0
+rect_min_size = Vector2( 800, 400 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HudLayer/Hud/PopupHandler/CenterContainer/Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -192.5
+margin_top = -131.0
+margin_right = 192.5
+margin_bottom = -80.0
+custom_constants/separation = 50
+
+[node name="EffectBtn" type="Button" parent="HudLayer/Hud/PopupHandler/CenterContainer/Panel/HBoxContainer"]
+margin_right = 174.0
+margin_bottom = 53.0
+text = "Effect Card"
+
+[node name="SeedBtn" type="Button" parent="HudLayer/Hud/PopupHandler/CenterContainer/Panel/HBoxContainer"]
+margin_left = 224.0
+margin_right = 387.0
+margin_bottom = 53.0
+text = "Seed Card"
+
+[node name="InfoLabel" type="Label" parent="HudLayer/Hud/PopupHandler/CenterContainer/Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -203.5
+margin_top = -94.5
+margin_right = 203.5
+margin_bottom = -49.5
+text = "Choose Next Turn Free Card"
+align = 1
+valign = 1
+
+[node name="TurnLabel" type="Label" parent="HudLayer/Hud"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -240.0
+margin_top = 64.0
+margin_right = -46.0
+margin_bottom = 152.0
+custom_fonts/font = ExtResource( 5 )
+text = "Turn 0"
+align = 2
+
+[node name="MusicButton" type="TextureButton" parent="HudLayer/Hud"]
+margin_left = 1796.0
+margin_top = 170.0
+margin_right = 1882.0
+margin_bottom = 250.0
+texture_normal = ExtResource( 11 )
+
+[node name="GameEndPanel" type="Control" parent="HudLayer/Hud"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="CenterContainer" type="CenterContainer" parent="HudLayer/Hud/GameEndPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="HudLayer/Hud/GameEndPanel/CenterContainer"]
+margin_left = 560.0
+margin_top = 240.0
+margin_right = 1360.0
+margin_bottom = 840.0
+rect_min_size = Vector2( 800, 600 )
+
+[node name="EndGameLabel" type="Label" parent="HudLayer/Hud/GameEndPanel/CenterContainer/Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -395.5
+margin_top = -216.0
+margin_right = 395.5
+margin_bottom = -24.0
+align = 1
+
+[node name="EndGameBtn" type="Button" parent="HudLayer/Hud/GameEndPanel/CenterContainer/Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -120.0
+margin_top = -93.0
+margin_right = 120.0
+margin_bottom = -40.0
+rect_min_size = Vector2( 240, 0 )
+text = "Menu Menu"
+
+[node name="TutorialBtn" type="Button" parent="HudLayer/Hud"]
+margin_left = 34.0
+margin_top = 197.0
+margin_right = 204.0
+margin_bottom = 250.0
+text = "Tutorial"
+
+[node name="MenuBtn" type="Button" parent="HudLayer/Hud"]
+margin_left = 1602.0
+margin_top = 182.0
+margin_right = 1772.0
+margin_bottom = 235.0
+text = "Main Menu"
+
+[node name="TutorialPanel" type="TextureRect" parent="HudLayer/Hud"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 12 )
+
+[node name="CloseTutorialBtn" type="Button" parent="HudLayer/Hud/TutorialPanel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -322.0
+margin_top = -125.0
+margin_right = -172.0
+margin_bottom = -72.0
+rect_min_size = Vector2( 150, 0 )
+text = "Back"
+
+[node name="BMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -15.0
+
+[node name="DiscardPile" parent="." instance=ExtResource( 13 )]
+position = Vector2( 140, 540 )
 
 [connection signal="pressed" from="HudLayer/Hud/EndTurnBtn" to="." method="_on_EndTurnBtn_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/PopupHandler/CenterContainer/Panel/HBoxContainer/EffectBtn" to="." method="_on_EffectBtn_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/PopupHandler/CenterContainer/Panel/HBoxContainer/SeedBtn" to="." method="_on_SeedBtn_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/MusicButton" to="." method="_on_MusicButton_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/GameEndPanel/CenterContainer/Panel/EndGameBtn" to="." method="_on_EndGameBtn_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/TutorialBtn" to="." method="_on_TutorialBtn_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/MenuBtn" to="." method="_on_MenuBtn_pressed"]
+[connection signal="pressed" from="HudLayer/Hud/TutorialPanel/CloseTutorialBtn" to="." method="_on_CloseTutorialBtn_pressed"]
